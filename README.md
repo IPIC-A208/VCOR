@@ -1,10 +1,10 @@
 # VCOR: A Video Compression Framework Using an Overfitted Restoration Neural Network
 
 
-Our video compression framework called VCOR which combine a conventional codec and a overfitted restoration neural network.
+Our video compression framework called VCOR which combine a conventional codec and a overfitted restoration neural network (ORNN). In an encoder, ORNN is trained online with the reconstructed frames from a conventional encoder as the input and the raw frames as the ground truth. The overfitting is realized by training it only with a group of consecutive frames. The overfitted parameters of ORNN are transmitted as a part of an encoded bitstream. In a decoder, with the transmitted parameters, an inference operation of ORNN is performed on the decoded frames to generate the final result.
 ![framework](./img/framework.png)
 
-Our network structure is illustrated as follow.
+Our network structure is illustrated as follow. (a) Overall architecture of the proposed ORNN, which includes single frame feature extraction (SF), multi frames feature extraction (MF), recursive processing (RP), and the reconstruction (Rec.) modules. (b) The architecture of SF module. (c) The architecture of MF module. (d) The architecture of RP module. $k$ denotes the number of the stacked convolutional layers. (e) The architecture of Rec. module. $n$ denotes the number of neighboring frames.
 ![network](./img/network.png)
 
 ## Experiment process
