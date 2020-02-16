@@ -2,12 +2,12 @@
 
 
 Our video compression framework called VCOR which combine a conventional codec and a overfitted restoration neural network.
-[framework](./img/framework.png)
+![framework](./img/framework.png)
 
 Our network structure is illustrated as follow.
-[network](./img/network.png)
+![network](./img/network.png)
 
-## Process
+## Experiment process
 The experiment is divided into two processes, conventional encode and overfitted restoration.
 ### conventional encode
 We tried five conventional codec, including HM, x264, x265, NVENC, VTM. The conventional encoded bitstream and decoder are in folder data. We can decode these bitstream to get reconstruction data.
