@@ -8,7 +8,6 @@ from torch.utils.data import DataLoader
 import yaml
 import time
 import os
-from Transformer import *
 
 
 
@@ -79,7 +78,7 @@ class Model():
             self.gain = psnr_gain.item()
         else:
             self.gain += psnr_gain.item()
-        print("Epoch[{}][{}/{}] | lr:{:.6f} | loss: {:.4f} | psnr: {:.4f}({:.4f}) psnr_gain: {:.4f}".format(epoch, step+1, length, self.optimizer.param_groups[0]['lr'], self.loss.item(), psnr_aft.item(), psnr_pre.item(), psnr_gain.item()))
+        print("Epoch[{}][{}/{}] | lr:{:.6f} | loss: {:.4f} | psnr_aft: {:.4f} psnr_pre: {:.4f} psnr_gain: {:.4f}".format(epoch, step+1, length, self.optimizer.param_groups[0]['lr'], self.loss.item(), psnr_aft.item(), psnr_pre.item(), psnr_gain.item()))
 
 
     def _log_maxgain(self, psnr_gain, epoch, name):

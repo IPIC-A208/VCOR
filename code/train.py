@@ -1,4 +1,5 @@
 import argparse
+import torch
 from torch.utils.data import DataLoader
 from utils import YUVread
 from model import Model
@@ -51,7 +52,7 @@ def main():
     parser.add_argument('--data', type=str, default='HM', help='HM, H266, X265, X264, NVENC')
     parser.add_argument('--sequence', type=str, default='BasketballDrive_1920_1080', help='sequence name')
     parser.add_argument('--neighbor', type=int, default=2, help='neighbor frame number')
-    parser.add_argument('--block', type=int, default=2, help='blocks of Model')
+    parser.add_argument('--block', type=int, default=4, help='blocks of Model')
     parser.add_argument('--channel', type=int, default=16, help='channels of Model')
     parser.add_argument('--optim', type=str, default='Adam', help='optimizer')
     # parser.add_argument('--block', type=int, default=16, help='channels of Model')
