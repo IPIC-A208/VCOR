@@ -55,8 +55,6 @@ def main():
     parser.add_argument('--channel', type=int, default=16, help='channels of Model')
     parser.add_argument('--optim', type=str, default='Adam', help='optimizer')
     # parser.add_argument('--block', type=int, default=16, help='channels of Model')
-
-
     args = parser.parse_args()
     frame_num = args.frame
     width, heigh = args.width, args.heigh

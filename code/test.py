@@ -1,11 +1,10 @@
 import argparse
-from torch.utils.data import DataLoader
 from utils import YUVread
 from model import Model
-from Transformer import *
-from data import MDataYUV, Data_codec_isolate
+from ORNN import ORNN
+from data import MDataYUV
 import time
-import yaml
+#import yaml
 import numpy as np
 import os
 
@@ -17,136 +16,19 @@ else:
 
 
 
-
 def get_model(args):
-    if args.model == 'BaseModel':
-        args.model = args.model + 'B_' + str(args.block)
-        print(args.model)
-        # print('???***************************************')
-        return BaseModel(block=args.block, fea_channel=args.channel)
-    if args.model == 'BaseModelV2':
-        args.model = args.model + '_C' + str(args.channel)
-        print(args.model)
-        # print('???***************************************')
-        return BaseModelV2(fea_channel=args.channel)
-    if args.model == 'BaseModelV3':
-        args.model = args.model + '_C' + str(args.channel)
-        print(args.model)
-        # print('???***************************************')
-        return BaseModelV3(fea_channel=args.channel)
-    if args.model == 'BaseV3NonLocal':
-        args.model = args.model + '_C' + str(args.channel)
-        print(args.model)
-        return BaseV3NonLocal(fea_channel=args.channel)
-    if args.model == 'BaseV3NonLocalV2':
-        args.model = args.model + '_C' + str(args.channel)
-        print(args.model)
-        return BaseV3NonLocalV2(fea_channel=args.channel)
-    if args.model == 'BaseV4NonLocal':
-        args.model = args.model + '_C' + str(args.channel)
-        print(args.model)
-        return BaseV4NonLocal(fea_channel=args.channel)
-    if args.model == 'BaseModelV4':
-        args.model = args.model + '_C' + str(args.channel)
-        print(args.model)
-        # print('???***************************************')
-        return BaseModelV4(fea_channel=args.channel)
-    if args.model == 'BaseV3Attention':
-        args.model = args.model + '_C' + str(args.channel)
-        print(args.model)
-        # print('???***************************************')
-        return BaseV3Attention(fea_channel=args.channel)        
-    if args.model == 'BaseV4Attention':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV4Attention(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV4CAT':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV4CAT(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV5CAT':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV5CAT(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV6CAT':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV6CAT(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseUNet':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseUNet(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV7CAT':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV7CAT(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV5CATV1':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV5CATV1(fea_channel=args.channel, deep=args.block)
-    if args.model == 'bprn_Attention':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return bprn_Attention(fea_channel=args.channel, block=args.block)
-    if args.model == 'BaseV5Multi':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV5Multi(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV5MultiA':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV5MultiA(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV5MultiABi':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV5MultiABi(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV5MultiAPool':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV5MultiAPool(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV5MultiAPoolV2':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV5MultiAPoolV2(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV5MultiAPoolV3':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV5MultiAPoolV3(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV5MultiAPoolV4':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV5MultiAPoolV4(fea_channel=args.channel, deep=args.block)
-    if args.model == 'BaseV5MultiAPoolV5':
-        args.model = args.model + '_C' + str(args.channel) + 'B' + str(args.block)
-        print(args.model)
-        return BaseV5MultiAPoolV5(fea_channel=args.channel, deep=args.block)
-
-
-
+	return ORNN(block=args.block, neighbor_frames=args.neighbor, channel=args.channel)
+		
+	
 
 def get_data(args):
-    if args.data == 'RA':
-        rec_path='../data/videos/RA/'+args.sequence+'_QP'+args.qp+'_RA_rec_HM.yuv'
-        label_path='../data/videos/RA/'+args.sequence+'.yuv'
-        rec_file = open(rec_path, 'rb')
-        label_file = open(label_path, 'rb')
-        if args.frame < 4:
-            rec_y, _, _ = YUVread(rec_file, [args.heigh, args.width], frame_num=args.frame+3, start_frame=0)
-            label_y, _, _ = YUVread(label_file, [args.heigh, args.width], frame_num=args.frame, start_frame=0)
-        else:
-            rec_y, _, _ = YUVread(rec_file, [args.heigh, args.width], frame_num=args.frame, start_frame=0)
-            label_y, _, _ = YUVread(label_file, [args.heigh, args.width], frame_num=args.frame, start_frame=0)
-        return MDataYUV(rec_y=rec_y, label_y=label_y, nFrames=args.neighbor, width=args.width, heigh=args.heigh, totalFrames=args.frame, width_cut=args.width_cut, heigh_cut=args.heigh_cut)
-    if args.data == 'pre':
-        args.model = 'pre_' + args.model
-        with open("/home/disk1/lilei/H265-overfit/data/derf/part1_GT_info.yaml", "r") as yaml_part1:
-            yaml_obj1 = yaml.load(yaml_part1.read())
-        with open("/home/disk1/lilei/H265-overfit/data/derf/part2_GT_info.yaml", "r") as yaml_part2:
-            yaml_obj2 = yaml.load(yaml_part2.read())
-        with open("/home/disk1/lilei/H265-overfit/data/derf/part3_GT_info.yaml", "r") as yaml_part3:
-            yaml_obj3 = yaml.load(yaml_part3.read())
-        return Data_codec_isolate(args.qp, yaml_obj1, yaml_obj2, yaml_obj3)
-
+	rec_path='../data/'+args.data+'/'+args.sequence+'_QP'+args.qp+'_rec.yuv'
+	label_path='../data/original/'+args.sequence+'.yuv'
+	rec_file = open(rec_path, 'rb')
+	label_file = open(label_path, 'rb')
+	rec_y, _, _ = YUVread(rec_file, [args.heigh, args.width], frame_num=args.frame, start_frame=0)
+	label_y, _, _ = YUVread(label_file, [args.heigh, args.width], frame_num=args.frame, start_frame=0)
+	return MDataYUV(rec_y=rec_y, label_y=label_y, nFrames=args.neighbor, width=args.width, heigh=args.heigh, totalFrames=args.frame, width_cut=args.width_cut, heigh_cut=args.heigh_cut)
 
 
 
@@ -154,35 +36,33 @@ def get_data(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--lr', type=float, default=1.0e-02, help='learning rate')
+    #parser.add_argument('--lr', type=float, default=1.0e-02, help='learning rate')
     parser.add_argument('--resume', type=str, default='none', help='resume model')
     parser.add_argument('--qp', type=str, default='22', help='training qp')
-    parser.add_argument('--decay', type=int, default=3000, help='learning rate decay')
-    parser.add_argument('--epoch', type=int, default=1000, help='all epoch want to run')
+    #parser.add_argument('--decay', type=int, default=3000, help='learning rate decay')
+    #parser.add_argument('--epoch', type=int, default=1000, help='all epoch want to run')
     parser.add_argument('--frame', type=int, default=50, help='frames need to test')
-    parser.add_argument('--epoch_start', type=int, default=0, help='start epoch')
-    parser.add_argument('--batch_size', type=int, default=64, help='batch')
-    parser.add_argument('--model', type=str, default='BaseModel', help='model want to use')
+    #parser.add_argument('--epoch_start', type=int, default=0, help='start epoch')
+    #parser.add_argument('--batch_size', type=int, default=64, help='batch')
+    parser.add_argument('--model', type=str, default='VCOR', help='model want to use')
     parser.add_argument('--width_cut', type=int, default=960, help='width cut')
     parser.add_argument('--heigh_cut', type=int, default=540, help='heigh cut')
     parser.add_argument('--width', type=int, default=1920, help='width')
     parser.add_argument('--heigh', type=int, default=1080, help='heigh')
-    parser.add_argument('--data', type=str, default='RA', help='HM, H266, X265, RA, RAdelta0')
+    parser.add_argument('--data', type=str, default='HM', help='HM, X264, X265, NVENC, VTM')
     parser.add_argument('--sequence', type=str, default='BasketballDrive_1920_1080', help='sequence name')
-    parser.add_argument('--neighbor', type=int, default=6, help='neighbor frame number')
+    parser.add_argument('--neighbor', type=int, default=2, help='neighbor frame number')
     parser.add_argument('--block', type=int, default=2, help='blocks of Model')
     parser.add_argument('--channel', type=int, default=16, help='channels of Model')
     parser.add_argument('--optim', type=str, default='Adam', help='optimizer')
     parser.add_argument('--save', type=str, default='False', help='saved name, default False')
     # parser.add_argument('--block', type=int, default=16, help='channels of Model')
-
-
     args = parser.parse_args()
     # frame_num = args.frame
     # width, heigh = args.width, args.heigh
     # sequence = args.sequence
+	
     blocks_per_frame = args.width * args.heigh // args.width_cut // args.heigh_cut
-
     model_ = get_model(args)
     
 
